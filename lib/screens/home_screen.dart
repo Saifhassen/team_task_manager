@@ -11,6 +11,9 @@ import 'package:team_task_manager/widgets/allpeople.dart';
 import 'package:team_task_manager/widgets/robotTipsWidget.dart';
 import 'package:team_task_manager/widgets/task_item.dart';
 import 'package:team_task_manager/screens/add_engineer_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 class HomeScreen extends StatefulWidget {
   final String? loggedEngineer;
@@ -26,9 +29,88 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   List<Task> _tasks = [];
   String _searchQuery = '';
+  bool hasChanges = false; // ✅ متغير يحدد وجود تغييرات
+  late Box<Task> tasksBox;
+  late Connectivity connectivity;
+  late Stream<ConnectivityResult> connectivityStream;
+
+  void applyChanges() {
+    setState(() {
+      _tasks = Hive.box<Task>('tasks').values.toList();
+      hasChanges = false; // ✅ أخفِ زر التحديث
+    });
+  }
+
+  void refreshDataIfChanged() {
+    final box = Hive.box<Task>('tasks');
+    final newTasks = box.values.toList();
+    if (newTasks.length != _tasks.length) {
+      setState(() {
+        hasChanges = true; // ✅ حصل تغيير
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    initialize();
+  }
+
+  Future<void> initialize() async {
+    await Firebase.initializeApp();
+
+    tasksBox = await Hive.openBox<Task>('tasks');
+
+    connectivity = Connectivity();
+
+    // استمع لتغيرات الاتصال مباشرة
+    connectivity.onConnectivityChanged.listen(
+      (ConnectivityResult result) {
+            if (result != ConnectivityResult.none) {
+              syncLocalToFirebase();
+            }
+          }
+          as void Function(List<ConnectivityResult> event)?,
+    );
+
+    _loadTasksFromHive();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('✅ تم الاتصال بالإنترنت'),
+        backgroundColor: Colors.green,
+        duration: Duration(seconds: 2),
+      ),
+    );
+
+    var connResult = await connectivity.checkConnectivity();
+    if (connResult != ConnectivityResult.none) {
+      await syncLocalToFirebase();
+    }
+  }
+
+  Future<void> syncLocalToFirebase() async {
+    print("Syncing local data to Firebase...");
+
+    final firestore = FirebaseFirestore.instance;
+
+    // مثال: مزامنة كل المهام من Hive إلى Firebase
+    for (var task in tasksBox.values) {
+      await firestore
+          .collection('tasks')
+          .doc(task.key.toString())
+          .set(task.toMap()); // يجب أن تضيف toMap() في كلاس Task
+    }
+
+    // مزامنة البيانات من Firebase إلى Hive (اختياري)
+    final snapshot = await firestore.collection('tasks').get();
+    for (var doc in snapshot.docs) {
+      final data = doc.data();
+      final taskFromFirebase = Task.fromMap(data); // تحتاج إلى fromMap في Task
+      await tasksBox.put(doc.id, taskFromFirebase);
+    }
+
+    // تحديث الواجهة
     _loadTasksFromHive();
   }
 
@@ -258,6 +340,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   _openPersonTasks(widget.loggedEngineer!);
                 },
               ),
+              if (hasChanges) // ✅ يظهر فقط إذا كان هناك تغيير
+                ListTile(
+                  leading: Icon(
+                    Icons.update_rounded,
+                    color: Colors.orange,
+                  ), // ✅ أيقونة مميزة
+                  title: Text('تحديث البيانات'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    applyChanges(); // ✅ تحميل التغييرات
+                  },
+                ),
 
               // ✅ تظهر فقط لسيف
               if (widget.loggedEngineer == 'سيف') ...[
@@ -347,11 +441,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _openAddTaskScreen,
-          backgroundColor: Color(0xFFFF5722),
-          child: Icon(Icons.add),
-        ),
+
         body: Stack(
           children: [
             Column(

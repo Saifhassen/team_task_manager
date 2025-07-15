@@ -50,6 +50,10 @@ dependencies:
   lottie: ^3.3.1
   marquee: ^2.3.0
   js: ^0.6.7  #
+  google_fonts: ^6.0.0
+  connectivity_plus: ^6.1.4
+  cloud_firestore: ^4.17.5
+
   
    # 👈 إصدار ثابت وآمن للويب
 
@@ -74,6 +78,8 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages
 flutter:
+  uses-material-design: true
+
   assets:
     - assets/animations/robot_wave.json
     - assets/animations/robot_walk_message.json
@@ -87,11 +93,13 @@ flutter:
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
-  # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
+
+
+  fonts:
+    - family: Schyler
+      fonts:
+        - asset: assets/fonts/NotoNaskhArabic-Bold.ttf
+
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

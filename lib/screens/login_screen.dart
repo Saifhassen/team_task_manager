@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:lottie/lottie.dart';
 import 'package:team_task_manager/screens/home_screen.dart';
 import 'package:team_task_manager/widgets/allpeople.dart'; // استيراد المتغيرات والوظائف
 
@@ -204,6 +205,15 @@ class _LoginScreenState extends State<LoginScreen> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 120,
+                      child: Lottie.asset(
+                        'assets/animations/robot_wave.json',
+                        height: 200,
+                        repeat: true,
+                        animate: true,
                       ),
                     ),
                   ],
