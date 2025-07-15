@@ -1,7 +1,8 @@
 plugins {
-    id("com.android.application") version "8.1.0" apply false
-    id("com.google.gms.google-services") version "4.4.0" apply false // ✅ أضف هذا السطر
+    id("com.android.application") version "8.7.0" apply false
+    id("com.google.gms.google-services") version "4.4.0" apply false // ✅ Firebase plugin إذا كنت تستخدم Firebase
 }
+
 allprojects {
     repositories {
         google()
@@ -9,6 +10,7 @@ allprojects {
     }
 }
 
+// ✅ تغيير مكان مجلد البناء (اختياري حسب الحاجة)
 val newBuildDir: Directory = rootProject.layout.buildDirectory.dir("../../build").get()
 rootProject.layout.buildDirectory.value(newBuildDir)
 
@@ -16,10 +18,13 @@ subprojects {
     val newSubprojectBuildDir: Directory = newBuildDir.dir(project.name)
     project.layout.buildDirectory.value(newSubprojectBuildDir)
 }
+
+// ✅ التأكد من ترتيب تقييم المشاريع الفرعية
 subprojects {
     project.evaluationDependsOn(":app")
 }
 
+// ✅ مهمة التنظيف
 tasks.register<Delete>("clean") {
     delete(rootProject.layout.buildDirectory)
 }
