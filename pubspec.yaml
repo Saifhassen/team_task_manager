@@ -74,12 +74,7 @@ dev_dependencies:
   # https://flutter.dev/to/resolution-aware-images
 
 # For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
-
-<<<<<<< HEAD
-
-=======
->>>>>>> 79bd5efd2fb98a4aaa480b01e6f2d7cebefcce7c
+# following page: https://dart.dev/tools/pub/pubsp
 # The following section is specific to Flutter packages
 flutter:
   uses-material-design: true
