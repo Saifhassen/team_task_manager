@@ -1,4 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<<<<<<< HEAD
+=======
+    
+>>>>>>> 79bd5efd2fb98a4aaa480b01e6f2d7cebefcce7c
     <application
         android:label="team_task_manager"
         android:name="${applicationName}"
