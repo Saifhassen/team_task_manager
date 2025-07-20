@@ -8,19 +8,15 @@ project 'Runner', {
   'Release' => :release,
 }
 
-def flutter_installation
-  flutter_root = File.expand_path('..', __dir__)
-  podhelper = File.join(flutter_root, 'packages', 'flutter_tools', 'bin', 'podhelper.rb')
-  load podhelper if File.exist?(podhelper)
-end
+# تحميل سكربت flutter الخاص بالـ CocoaPods
+flutter_application_path = File.expand_path('..', __dir__)
+load File.join(flutter_application_path, '.ios', 'Flutter', 'podhelper.rb')
 
 target 'Runner' do
   use_frameworks!
   use_modular_headers!
 
-  flutter_installation
-
-  flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+  install_all_flutter_pods(flutter_application_path)
 end
 
 post_install do |installer|
