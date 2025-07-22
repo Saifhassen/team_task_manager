@@ -8,17 +8,26 @@ project 'Runner', {
   'Release' => :release,
 }
 
-# تحميل سكربت flutter الخاص بالـ CocoaPods
+# تحديد مسار مشروع Flutter
 flutter_application_path = File.expand_path('..', __dir__)
-load File.join(flutter_application_path, 'ios', 'Flutter', 'podhelper.rb')
+
+# التأكد من وجود podhelper.rb قبل التحميل لتجنب الخطأ
+podhelper_path = File.join(flutter_application_path, 'ios', 'Flutter', 'podhelper.rb')
+if File.exist?(podhelper_path)
+  load podhelper_path
+else
+  raise "❌ ملف podhelper.rb غير موجود في: #{podhelper_path}"
+end
 
 target 'Runner' do
   use_frameworks!
   use_modular_headers!
 
+  # تثبيت جميع حزم Flutter
   install_all_flutter_pods(flutter_application_path)
 end
 
+# إعدادات إضافية بعد التثبيت
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
