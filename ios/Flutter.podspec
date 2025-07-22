@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.homepage         = 'https://flutter.dev'
   s.license          = { :type => 'BSD', :file => 'LICENSE' }
   s.author           = { 'Flutter Dev Team' => 'flutter-dev@googlegroups.com' }
-  s.source           = { :http => 'https://storage.googleapis.com/flutter_infra_release/flutter/abcdef1234567890/ios/flutter.podspec' }
+  s.source           = { :path => '.' } # <== هذا هو التغيير المهم
   s.platform         = :ios, '9.0'
   s.vendored_frameworks = 'Flutter.xcframework'
   s.preserve_paths   = 'Flutter.xcframework'
