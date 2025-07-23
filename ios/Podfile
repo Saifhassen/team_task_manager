@@ -9,7 +9,8 @@ project 'Runner', {
 }
 
 flutter_application_path = File.expand_path('..', __dir__)
-load File.join(flutter_application_path, '.ios', 'Flutter', 'podhelper.rb')
+load File.join(flutter_application_path, 'ios', 'Flutter', 'podhelper.rb')
+
 
 target 'Runner' do
   use_frameworks!
