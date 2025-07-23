@@ -8,19 +8,30 @@ project 'Runner', {
   'Release' => :release,
 }
 
+flutter_root = File.expand_path('..', File.dirname(__FILE__))
 flutter_application_path = File.expand_path('..', __dir__)
-load File.join(flutter_application_path, 'ios', 'Flutter', 'podhelper.rb')
-
+engine_dir = File.join(flutter_root, 'bin', 'cache', 'artifacts', 'engine')
+framework_dir = File.join(engine_dir, 'ios')
 
 target 'Runner' do
   use_frameworks!
   use_modular_headers!
 
-  install_all_flutter_pods(flutter_application_path)
+  pod 'Flutter', :path => File.join(__dir__, 'Flutter')
+
+  pod 'FirebaseCore'
+  pod 'FirebaseFirestore'
+  pod 'FirebaseAuth'
+  pod 'FirebaseDatabase'
+
+  flutter_install_all_ios_pods File.join(__dir__, '..')
 end
 
 post_install do |installer|
   installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
+    end
     flutter_additional_ios_build_settings(target)
   end
 end
