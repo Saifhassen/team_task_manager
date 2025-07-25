@@ -494,7 +494,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
 
-            Positioned(bottom: 0, left: 0, right: 0, child: WelcomeBanner()),
+            Positioned(bottom: 0, left: 0, right: 0, child: RobotTipsWidget()),
           ],
         ),
       ),

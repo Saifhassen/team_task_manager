@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:lottie/lottie.dart';
 import 'package:team_task_manager/screens/home_screen.dart';
-import 'package:team_task_manager/widgets/allpeople.dart'; // استيراد المتغيرات والوظائف
+import 'package:team_task_manager/widgets/allpeople.dart';
+import 'package:team_task_manager/widgets/robotTipsWidget2.dart'; // استيراد المتغيرات والوظائف
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -207,14 +208,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 120,
-                      child: Lottie.asset(
-                        'assets/animations/robot_wave.json',
-                        height: 200,
-                        repeat: true,
-                        animate: true,
-                      ),
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: RobotTipsWidget2(),
                     ),
                   ],
                 ),
