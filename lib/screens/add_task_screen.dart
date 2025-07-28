@@ -66,6 +66,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     "متابعة",
     "لجنة",
     "سجل الصيانة",
+    "كارت صيانة",
     "اخرى",
   ];
 
